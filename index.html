@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Arènes des légendes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- Écran d'accueil -->
+<div id="start-screen" class="screen active">
+
+    <div class="title-container">
+        <h1>Arène des Légendes</h1>
+        <p class="subtitle">Affrontez vos adversaires dans des duels stratégiques épiques</p>
+    </div>
+    <div id="card-container" class="hero-selection">
+    </div>
+    <div class="buttons">
+        <button id="start-game" class="btn primary-btn">
+            <i class="fas fa-play"></i>
+            Commencer à jouer
+        </button>
+        <button id="show-instructions" class="btn secondary-btn">
+            <i class="fas fa-book"></i>
+            Instructions
+        </button>
+    </div>
+</div>
+<!-- Écran d'instructions -->
+<div id="instructions-screen" class="screen">
+    <div class="instructions-container">
+        <h2>Instructions du Jeu</h2>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="objectif">Objectif</button>
+            <button class="tab-btn" data-tab="combat">Combat</button>
+            <button class="tab-btn" data-tab="futur">Futur</button>
+        </div>
+
+        <div class="tab-content active" id="objectif">
+            <h3>Objectif du Jeu</h3>
+            <p>Dans <strong>Arène des Légendes</strong>, chaque joueur incarne un héros unique doté de capacités spéciales. Le but est simple : <strong>être le dernier survivant</strong> dans une <strong>arène fermée</strong> de <strong>7x7 cases</strong>.</p>
+            <p>À chaque tour, les joueurs doivent faire preuve de stratégie pour <strong>se déplacer, attaquer, utiliser des pouvoirs ou se défendre</strong>.</p>
+
+            <div class="info-box">
+                <h4>Nombre de Joueurs</h4>
+                <ul>
+                    <li><strong>2 à 4 joueurs</strong></li>
+                    <li>Chaque joueur choisit <strong>un seul héros</strong> qu'il contrôle durant toute la partie.</li>
+                    <li>Si 4 joueurs : les héros commencent généralement <strong>dans les coins</strong> de l'arène.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content" id="combat">
+            <h3>Mécanique de Combat</h3>
+
+            <div class="info-box">
+                <h4>Système de dé pour les attaques</h4>
+                <div class="dice-results">
+                    <div class="dice-result">
+                        <div class="dice">1-2</div>
+                        <span>échec</span>
+                    </div>
+                    <div class="dice-result">
+                        <div class="dice">3-5</div>
+                        <span>réussite (dégâts normaux)</span>
+                    </div>
+                    <div class="dice-result">
+                        <div class="dice">6</div>
+                        <span>coup critique (dégâts doublés)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h4>Éléments de Jeu</h4>
+                <ul>
+                    <li><strong>Un héros par joueur</strong></li>
+                    <li><strong>Objectif</strong> : Dernier survivant</li>
+                    <li><strong>Types d'actions</strong> : déplacement, attaque, pouvoir, esquive</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content" id="futur">
+            <h3>Améliorations à venir</h3>
+
+            <div class="future-grid">
+                <div class="future-box">
+                    <h4>Nouveaux héros</h4>
+                    <ul>
+                        <li>Moine</li>
+                        <li>Assassin</li>
+                        <li>Bête mythique</li>
+                    </ul>
+                </div>
+
+                <div class="future-box">
+                    <h4>Effets d'arène</h4>
+                    <ul>
+                        <li>Pièges</li>
+                        <li>Portails</li>
+                        <li>Bonus aléatoires</li>
+                    </ul>
+                </div>
+
+                <div class="future-box">
+                    <h4>Mode multijoueur</h4>
+                    <ul>
+                        <li>En ligne</li>
+                        <li>Local</li>
+                    </ul>
+                </div>
+
+                <div class="future-box">
+                    <h4>Personnalisation des héros</h4>
+                    <ul>
+                        <li>Apparence</li>
+                        <li>Compétences</li>
+                        <li>Équipement</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <button id="close-instructions" class="btn primary-btn">Retour</button>
+    </div>
+</div>
+<!-- Écran de sélection du nombre de joueurs -->
+<div id="player-count-screen" class="screen">
+    <div class="selection-container">
+        <h2>Nombre de joueurs</h2>
+        <p class="selection-subtitle">Choisissez le nombre de joueurs qui participeront à la bataille</p>
+
+        <div class="player-count-options ">
+            <div class="count-option selected" data-count="2">
+                <div class="count-icon">2</div>
+                <span>2 Joueurs</span>
+            </div>
+            <div class="count-option" data-count="3">
+                <div class="count-icon">3</div>
+                <span>3 Joueurs</span>
+            </div>
+            <div class="count-option" data-count="4">
+                <div class="count-icon">4</div>
+                <span>4 Joueurs</span>
+            </div>
+        </div>
+        <div id="player-name-fields" class="player-names">
+            <div class="player-name-field visible" data-player="1">
+                <label for="player1-name">Nom du Joueur 1:</label>
+                <input type="text" id="player1-name" placeholder="Entrez le nom du Joueur 1">
+            </div>
+            <div class="player-name-field visible" data-player="2">
+                <label for="player2-name">Nom du Joueur 2:</label>
+                <input type="text" id="player2-name" placeholder="Entrez le nom du Joueur 2">
+            </div>
+            <div class="player-name-field" data-player="3">
+                <label for="player3-name">Nom du Joueur 3:</label>
+                <input type="text" id="player3-name" placeholder="Entrez le nom du Joueur 3">
+            </div>
+            <div class="player-name-field" data-player="4">
+                <label for="player4-name">Nom du Joueur 4:</label>
+                <input type="text" id="player4-name" placeholder="Entrez le nom du Joueur 4">
+            </div>
+        </div>
+
+        <div class="buttons">
+        <button id="confirm-player-count" class="btn primary-btn">Continuer</button>
+        <button id="back-to-start" class="btn secondary-btn">Retour</button>
+        </div>
+    </div>
+</div>
+<!-- Écran de sélection des héros -->
+<div id="hero-selection-screen" class="screen">
+    <div class="selection-container">
+        <h2>Sélection des héros</h2>
+        <div id="current-player-selection">Joueur 1, choisissez votre héros</div>
+
+        <div id="hero-selection-cards" class="hero-selection">
+            <!-- Hero cards will be inserted here by JavaScript -->
+        </div>
+        <button id="start-battle" class="btn primary-btn" disabled>Commencer la bataille</button>
+    </div>
+</div>
+<!-- Écran de jeu -->
+<div id="game-screen" class="screen">
+    <div class="game-header">
+        <h2>Arène des Légendes</h2>
+        <div class="turn-info">Tour: <span id="turn-counter">1</span> | Joueur: <span id="current-player">1</span></div>
+    </div>
+
+    <div class="game-container">
+        <div class="arena-container">
+            <div id="arena" class="arena"></div>
+            <div id="dice-container" class="dice-container">
+                <div id="dice" class="dice">
+                    <div class="dice-face">1</div>
+                </div>
+                <!--<button id="roll-dice" class="btn small-btn">Lancer le dé</button>-->
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <div class="player-info">
+                <div id="player-hero" class="player-hero">
+                    <div class="hero-avatar">
+                        <i class="fas fa-user-alt"></i>
+                    </div>
+                    <div class="hero-details">
+                        <h3 id="hero-name">Héros</h3>
+                        <div class="hero-health">
+                            <span>Santé </span>
+                            <div class="health-bar">
+                                <div id="health-fill" class="health-fill" style="width: 100%"></div>
+                            </div>
+                            <span id="health-value">100/100</span>
+                        </div>
+                        <div class="hero-health">
+                            <span>Charge</span>
+                            <div class="health-bar">
+                                <div id="charge-fill" class="charge-fill" style="width: 100%"></div>
+                            </div>
+                            <span id="charge-value">100/100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <h4>Actions</h4>
+                    <div class="action-grid">
+                        <button id="move-btn" class="action-btn">
+                            <i class="fas fa-walking"></i>
+                            <span>Déplacer</span>
+                        </button>
+                        <button id="attack-btn" class="action-btn">
+                            <i class="fas fa-fist-raised"></i>
+                            <span>Attaquer</span>
+                        </button>
+                        <button id="special-btn" class="action-btn">
+                            <i class="fas fa-bolt"></i>
+                            <span>Pouvoir</span>
+                        </button>
+                        <button id="defend-btn" class="action-btn">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Défendre</span>
+                        </button>
+                    </div>
+                </div>
+
+<!--                <div class="movement-controls hidden" id="movement-controls">
+                    <h4>Direction</h4>
+                    <div class="direction-grid">
+                        <button class="direction-btn" data-direction="up">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <button class="direction-btn" data-direction="left">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <button class="direction-btn" data-direction="right">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="direction-btn" data-direction="down">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                    </div>
+                    <button id="cancel-move" class="btn small-btn">Annuler</button>
+                </div>
+-->
+                <div class="attack-controls hidden" id="attack-controls">
+                    <h4>Type d'attaque</h4>
+                    <div class="attack-options">
+                        <button class="attack-option-btn" data-attack="quick">
+                            <i class="fas fa-bolt"></i>
+                            <span>Attaque rapide</span>
+                        </button>
+                        <button class="attack-option-btn" data-attack="heavy">
+                            <i class="fas fa-hammer"></i>
+                            <span>Attaque lourde</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="game-log" id="game-log">
+                <h4>Journal de combat</h4>
+                <div id="log-entries" class="log-entries"></div>
+            </div>
+            <!--<button id="end-turn" class="btn primary-btn">Terminer le tour</button> -->
+        </div>
+    </div>
+</div>
+<!-- Écran de fin de partie -->
+<div id="end-screen" class="screen">
+    <div class="end-container">
+        <div class="trophy-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <h2>Fin de la partie!</h2>
+        <div id="winner-announcement" class="winner-announcement">
+            Le <span id="winner-hero">Héros</span> est victorieux!
+        </div>
+
+        <div class="game-stats">
+            <div class="stat-box">
+                <h4>Tours joués</h4>
+                <div id="total-turns" class="stat-value">12</div>
+            </div>
+            <div class="stat-box">
+                <h4>Attaques</h4>
+                <div id="total-attacks" class="stat-value">8</div>
+            </div>
+            <div class="stat-box">
+                <h4>Dégâts infligés</h4>
+                <div id="total-damage" class="stat-value">45</div>
+            </div>
+            <div class="stat-box">
+                <h4>Coups critiques</h4>
+                <div id="total-crits" class="stat-value">2</div>
+            </div>
+        </div>
+
+        <div class="end-buttons">
+            <button id="play-again" class="btn primary-btn">Rejouer</button>
+            <button id="return-home" class="btn secondary-btn">Retour à l'accueil</button>
+        </div>
+    </div>
+</div>
+<!-- Éléments de fond animés -->
+<div class="background-elements" id="background-elements"></div>
+<script src="js/script.js"></script>
+</body>
+</html>
