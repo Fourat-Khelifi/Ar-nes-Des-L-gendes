@@ -1039,3 +1039,454 @@ h1 {
         align-items: center;
     }
 }
+
+/* Animation du dé */
+.dice-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1a1a2e;
+    z-index: 1000;
+    animation: diceRoll 1s ease-in-out;
+}
+
+@keyframes diceRoll {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translate(-50%, -50%) rotate(180deg) scale(1.2);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(360deg) scale(1);
+    }
+    75% {
+        transform: translate(-50%, -50%) rotate(540deg) scale(1.2);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(720deg) scale(1);
+    }
+}
+
+/* Popup de début de partie */
+.start-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(26, 26, 46, 0.95);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(249, 200, 14, 0.3);
+    text-align: center;
+    z-index: 1001;
+    animation: popupAppear 0.5s ease-out;
+    border: 2px solid #f9c80e;
+}
+
+.start-popup h2 {
+    color: #f9c80e;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.start-popup p {
+    color: white;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.start-popup .player-name {
+    color: #f9c80e;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+
+@keyframes popupAppear {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Styles pour les points d'interrogation */
+.question-mark {
+    position: relative;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    animation: pulse 2s infinite;
+}
+
+.mystery-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f9c80e;
+    text-shadow: 0 0 10px rgba(249, 200, 14, 0.5);
+    animation: float 2s infinite ease-in-out;
+}
+
+.mystery-reveal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(26, 26, 46, 0.95);
+    padding: 1.5rem;
+    border-radius: 12px;
+    color: white;
+    text-align: center;
+    z-index: 999999;
+    animation: revealAnimation 1s ease-out;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    border: 2px solid;
+    min-width: 200px;
+}
+
+
+.mystery-reveal[data-type="bonus"] {
+    border-color: #2ecc71;
+}
+
+.mystery-reveal[data-type="obstacle"] {
+    border-color: #e74c3c;
+}
+
+.mystery-reveal .mystery-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+    animation: bounce 0.5s ease-in-out;
+}
+
+.mystery-reveal .mystery-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.mystery-reveal .mystery-effect {
+    font-size: 1.1rem;
+    color: #2ecc71;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.mystery-reveal .mystery-damage {
+    font-size: 1.1rem;
+    color: #e74c3c;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.mystery-reveal .mystery-type {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+@keyframes revealAnimation {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Styles pour le popup de carte */
+.card-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    width: 90%;
+    max-width: 400px;
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: cardAppear 0.5s ease-out;
+    border: 2px solid;
+    overflow: hidden;
+}
+
+.card-popup[data-type="bonus"] {
+    border-color: #2ecc71;
+}
+
+.card-popup[data-type="obstacle"] {
+    border-color: #e74c3c;
+}
+
+.card-header {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f9c80e;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card-content {
+    padding: 2rem;
+    text-align: center;
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    animation: bounce 0.5s ease-in-out;
+}
+
+.card-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card-effect {
+    font-size: 1.2rem;
+    color: #2ecc71;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: rgba(46, 204, 113, 0.1);
+    border-radius: 10px;
+}
+
+.card-damage {
+    font-size: 1.2rem;
+    color: #e74c3c;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: rgba(231, 76, 60, 0.1);
+    border-radius: 10px;
+}
+
+.card-description {
+    font-size: 1rem;
+    color: #b8c1ec;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.card-footer {
+    padding: 1rem;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-close-btn {
+    background: linear-gradient(to right, #f9c80e, #f86624);
+    color: #1a1a2e;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.card-close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(249, 200, 14, 0.4);
+}
+
+@keyframes cardAppear {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Overlay pour popup */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.6);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quit-popup {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 18px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+    padding: 2.5rem 2rem 2rem 2rem;
+    min-width: 320px;
+    max-width: 90vw;
+    text-align: center;
+    border: 2px solid #f9c80e;
+    animation: popupAppear 0.4s;
+}
+
+.quit-popup h2 {
+    color: #f9c80e;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.quit-popup p {
+    color: #fff;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.quit-popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.quit-popup .btn {
+    padding: 0.7rem 2rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quit-popup .btn-cancel {
+    background: #b8c1ec;
+    color: #1a1a2e;
+}
+
+.quit-popup .btn-cancel:hover {
+    background: #f9c80e;
+    color: #1a1a2e;
+}
+
+.quit-popup .btn-confirm {
+    background: linear-gradient(to right, #f86624, #ea3546);
+    color: #fff;
+}
+
+.quit-popup .btn-confirm:hover {
+    background: linear-gradient(to right, #f9c80e, #ea3546);
+    color: #1a1a2e;
+}
+
+.bar-anim-green {
+    animation: barGreenFlash 0.7s;
+}
+
+.bar-anim-red {
+    animation: barRedFlash 0.7s;
+}
+
+@keyframes barGreenFlash {
+    0% { box-shadow: 0 0 0px 0px #2ecc71; }
+    30% { box-shadow: 0 0 16px 6px #2ecc71; }
+    100% { box-shadow: 0 0 0px 0px #2ecc71; }
+}
+
+@keyframes barRedFlash {
+    0% { box-shadow: 0 0 0px 0px #e74c3c; }
+    30% { box-shadow: 0 0 16px 6px #e74c3c; }
+    100% { box-shadow: 0 0 0px 0px #e74c3c; }
+}
+
+.info-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #f9c80e, #f86624);
+    color: #1a1a2e;
+    padding: 2rem 2.5rem;
+    border-radius: 18px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    z-index: 3000;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    animation: infoPopupAppear 0.4s;
+    min-width: 280px;
+    max-width: 90vw;
+}
+
+.info-popup-hide {
+    animation: infoPopupHide 0.5s forwards;
+}
+
+@keyframes infoPopupAppear {
+    0% { opacity: 0; transform: translate(-50%, -60%) scale(0.8); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes infoPopupHide {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -40%) scale(0.8); }
+}
+
+.info-popup-content {
+    padding: 0.5rem 0;
+}
