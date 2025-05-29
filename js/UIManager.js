@@ -1,7 +1,7 @@
 import {GRID_SIZE, HEROES, STARTING_POSITIONS} from "./config.js";
 import {gameState} from "./script.js";
 import {updateHeroSelectionScreen} from "./ScreenManager.js";
-import {handleCellClick, hasValidAttackTargets} from "./GameManager.js";
+import {addLogEntry, endTurn, handleCellClick, hasValidAttackTargets} from "./GameManager.js";
 
 export function createBackgroundElements() {
     const backgroundElements = document.getElementById("background-elements");
@@ -551,4 +551,204 @@ export function showInfoPopup(message) {
         popup.classList.add('info-popup-hide');
         setTimeout(() => popup.remove(), 500);
     }, 3000);
+}
+export function revealMystery(cell) {
+    const isBonus = Math.random() < 0.6; // 60% de chance d'être un bonus
+    let result;
+
+    // Ajout du nouveau bonus 'extraTurn'
+    const bonusTypes = ['health', 'charge', 'power', 'extraTurn'];
+    if (isBonus) {
+        const randomType = bonusTypes[Math.floor(Math.random() * bonusTypes.length)];
+        if (randomType === 'health') {
+            result = {
+                type: 'bonus',
+                icon: '❤️',
+                effect: 20,
+                name: 'Potion de vie',
+                bonusType: 'health'
+            };
+        } else if (randomType === 'charge') {
+            result = {
+                type: 'bonus',
+                icon: '⚡',
+                effect: 30,
+                name: 'Énergie',
+                bonusType: 'charge'
+            };
+        } else if (randomType === 'power') {
+            result = {
+                type: 'bonus',
+                icon: '✨',
+                effect: 1,
+                name: 'Pouvoir',
+                bonusType: 'power'
+            };
+        } else if (randomType === 'extraTurn') {
+            result = {
+                type: 'bonus',
+                icon: '🔁',
+                effect: 0,
+                name: 'Tour supplémentaire',
+                bonusType: 'extraTurn'
+            };
+        }
+    } else {
+        const obstacleTypes = ['rock', 'tree', 'trap'];
+        const randomType = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+        result = {
+            type: 'obstacle',
+            icon: randomType === 'rock' ? '🪨' : randomType === 'tree' ? '🌳' : '⚠️',
+            damage: randomType === 'rock' ? 5 : randomType === 'tree' ? 3 : 15,
+            name: randomType === 'rock' ? 'Rocher' : randomType === 'tree' ? 'Arbre' : 'Piège'
+        };
+    }
+
+    // Afficher le popup de révélation initial
+    const popup = document.createElement('div');
+    popup.className = 'mystery-reveal';
+    popup.innerHTML = `
+        <div class="mystery-icon">${result.icon}</div>
+        <div class="mystery-name">${result.name}</div>
+        ${result.type === 'bonus'
+        ? `<div class="mystery-effect">${result.bonusType === 'extraTurn' ? 'Rejoue immédiatement !' : '+' + result.effect + (result.name === 'Potion de vie' ? ' PV' : result.name === 'Énergie' ? ' Charge' : result.name === 'Pouvoir' ? ' Tour de recharge' : '')}</div>`
+        : `<div class="mystery-damage">-${result.damage} PV</div>`
+    }
+        <div class="mystery-type">${result.type === 'bonus' ? '🎁 Bonus !' : '💥 Obstacle !'}</div>
+    `;
+    cell.appendChild(popup);
+
+    setTimeout(() => {
+        const cardPopup = document.createElement('div');
+        cardPopup.className = 'card-popup';
+        cardPopup.innerHTML = `
+            <div class="card-header">
+                <div class="card-title">${result.type === 'bonus' ? '🎁 Bonus Découvert !' : '💥 Obstacle Rencontré !'}</div>
+            </div>
+            <div class="card-content">
+                <div class="card-icon">${result.icon}</div>
+                <div class="card-name">${result.name}</div>
+                ${result.type === 'bonus'
+            ? `<div class="card-effect">${result.bonusType === 'extraTurn' ? 'Tu gagnes un tour supplémentaire !' : 'Vous avez obtenu : +' + result.effect + (result.name === 'Potion de vie' ? ' Points de Vie' : result.name === 'Énergie' ? ' Points de Charge' : ' Tours de Recharge')}</div>`
+            : `<div class="card-damage">Vous avez subi : -${result.damage} Points de Vie</div>`
+        }
+                <div class="card-description">
+                    ${result.type === 'bonus'
+            ? (result.bonusType === 'extraTurn' ? 'Bravo ! Tu peux rejouer immédiatement.' : 'Un bonus bienvenu pour renforcer votre héros !')
+            : 'Un obstacle dangereux qui vous a affaibli !'
+        }
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="card-close-btn">Continuer</button>
+            </div>
+        `;
+        document.body.appendChild(cardPopup);
+
+        // Appliquer l'effet APRÈS le popup, pour voir l'animation
+        const currentPlayer = gameState.players[gameState.currentPlayer];
+        let barSelector = null;
+        let animClass = null;
+        let joueurElimine = false;
+        if (result.type === 'bonus') {
+            if (result.bonusType === 'health') {
+                currentPlayer.health = Math.min(HEROES[currentPlayer.hero].health, currentPlayer.health + result.effect);
+                animClass = 'bar-anim-green';
+                barSelector = '#health-fill';
+                addLogEntry(`${gameState.playerNames[gameState.currentPlayer]} récupère ${result.effect} points de vie !`, `player${gameState.currentPlayer + 1}`);
+            } else if (result.bonusType === 'charge') {
+                currentPlayer.charge = Math.min(HEROES[currentPlayer.hero].maxCharge, currentPlayer.charge + result.effect);
+                animClass = 'bar-anim-green';
+                barSelector = '#charge-fill';
+                addLogEntry(`${gameState.playerNames[gameState.currentPlayer]} récupère ${result.effect} points de charge !`, `player${gameState.currentPlayer + 1}`);
+            } else if (result.bonusType === 'power') {
+                currentPlayer.powerCooldown = Math.max(0, currentPlayer.powerCooldown - result.effect);
+                animClass = 'bar-anim-green';
+                barSelector = '#charge-fill';
+                addLogEntry(`${gameState.playerNames[gameState.currentPlayer]} réduit le temps de recharge de son pouvoir spécial !`, `player${gameState.currentPlayer + 1}`);
+            } else if (result.bonusType === 'extraTurn') {
+                // Bonus tour supplémentaire : rien à faire ici, le joueur rejoue
+                animClass = 'bar-anim-green';
+                barSelector = '#charge-fill';
+                addLogEntry(`${gameState.playerNames[gameState.currentPlayer]} gagne un tour supplémentaire !`, `player${gameState.currentPlayer + 1}`);
+            }
+        } else {
+            currentPlayer.health = Math.max(0, currentPlayer.health - result.damage);
+            animClass = 'bar-anim-red';
+            barSelector = '#health-fill';
+            addLogEntry(`${gameState.playerNames[gameState.currentPlayer]} subit ${result.damage} dégâts du ${result.name} !`, `player${gameState.currentPlayer + 1}`);
+            if (currentPlayer.health <= 0) {
+                joueurElimine = true;
+            }
+        }
+
+        // Supprimer le point d'interrogation
+        cell.classList.remove("question-mark");
+        cell.dataset.isMystery = "false";
+        cell.innerHTML = '';
+
+        // Animation et update après fermeture du popup
+        const closeBtn = cardPopup.querySelector('.card-close-btn');
+        closeBtn.addEventListener('click', () => {
+            cardPopup.remove();
+            updateGameDisplay();
+            if (barSelector && animClass) {
+                const bar = document.querySelector(barSelector);
+                if (bar) {
+                    bar.classList.add(animClass);
+                    setTimeout(() => {
+                        bar.classList.remove(animClass);
+                        // Si le joueur est éliminé, le retirer et ajuster l'index
+                        if (joueurElimine) {
+                            addLogEntry(`${gameState.playerNames[gameState.currentPlayer]} est vaincu par ${result.name} !`, 'system');
+                            gameState.players.splice(gameState.currentPlayer, 1);
+                            if (gameState.currentPlayer >= gameState.players.length) {
+                                gameState.currentPlayer = 0;
+                            }
+                            updateGameDisplay();
+                        }
+                        // Si c'est un bonus extraTurn, ne pas appeler endTurn (le joueur rejoue)
+                        if (!(result.type === 'bonus' && result.bonusType === 'extraTurn')) {
+                            endTurn();
+                        } else {
+                            //showInfoPopup('Bravo ! Tu gagnes un tour supplémentaire !');
+                        }
+                    }, 700);
+                } else {
+                    if (joueurElimine) {
+                        addLogEntry(`${gameState.playerNames[gameState.currentPlayer]} est vaincu par ${result.name} !`, 'system');
+                        gameState.players.splice(gameState.currentPlayer, 1);
+                        if (gameState.currentPlayer >= gameState.players.length) {
+                            gameState.currentPlayer = 0;
+                        }
+                        updateGameDisplay();
+                    }
+                    if (!(result.type === 'bonus' && result.bonusType === 'extraTurn')) {
+                        endTurn();
+                    } else {
+                        showInfoPopup('Bravo ! Tu gagnes un tour supplémentaire !');
+                    }
+                }
+            } else {
+                if (joueurElimine) {
+                    addLogEntry(`${gameState.playerNames[gameState.currentPlayer]} est vaincu par ${result.name} !`, 'system');
+                    gameState.players.splice(gameState.currentPlayer, 1);
+                    if (gameState.currentPlayer >= gameState.players.length) {
+                        gameState.currentPlayer = 0;
+                    }
+                    updateGameDisplay();
+                }
+                if (!(result.type === 'bonus' && result.bonusType === 'extraTurn')) {
+                    endTurn();
+                } else {
+                    showInfoPopup('Bravo ! Tu gagnes un tour supplémentaire !');
+                }
+            }
+        });
+    }, 1000);
+
+    // Supprimer l'animation initiale après 1 seconde
+    setTimeout(() => {
+        popup.remove();
+    }, 1000);
 }
